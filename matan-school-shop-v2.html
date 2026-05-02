@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Matan's School Shop</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #14213d;
+      --muted: #6b7280;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --green: #16a34a;
+      --orange: #f97316;
+      --red: #dc2626;
+      --purple: #7c3aed;
+      --border: #e5e7eb;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #eaf1ff 0%, var(--bg) 38%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px 22px 95px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .week-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
+
+    .tabs {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      background: rgba(244, 247, 251, 0.88);
+      backdrop-filter: blur(16px);
+      padding: 12px 0;
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      border: 0;
+      border-radius: 18px;
+      padding: 14px 10px;
+      font-size: 15px;
+      font-weight: 800;
+      background: #ffffff;
+      color: var(--muted);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .grid.two { grid-template-columns: 1.1fr 0.9fr; }
+    .grid.three { grid-template-columns: repeat(3, 1fr); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .metric .value {
+      margin-top: 8px;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .good { color: var(--green); }
+    .bad { color: var(--red); }
+    .blue { color: var(--blue); }
+    .orange { color: var(--orange); }
+    .purple { color: var(--purple); }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 12px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+      margin: 12px 0 6px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 15px 14px;
+      font-size: 17px;
+      background: #f9fafb;
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
+      background: white;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 16px;
+      padding: 15px 18px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, .18);
+    }
+
+    .btn:hover { background: var(--blue-dark); }
+    .btn.secondary { background: #eef2ff; color: var(--blue); box-shadow: none; }
+    .btn.green { background: var(--green); }
+    .btn.orange { background: var(--orange); }
+    .btn.red { background: var(--red); }
+    .btn.full { width: 100%; margin-top: 16px; }
+
+    .list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #fbfdff;
+    }
+
+    .row-title { font-weight: 900; font-size: 18px; }
+    .row-sub { color: var(--muted); font-weight: 650; margin-top: 3px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-size: 13px;
+      font-weight: 900;
+      background: #eef2ff;
+      color: var(--blue);
+      margin-left: 6px;
+    }
+
+    .tag.red { background: #fee2e2; color: var(--red); }
+    .tag.green { background: #dcfce7; color: var(--green); }
+    .tag.orange { background: #ffedd5; color: var(--orange); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 13px 10px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 28px;
+      border: 2px dashed var(--border);
+      border-radius: 18px;
+      font-weight: 700;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(90px);
+      background: #111827;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+      box-shadow: var(--shadow);
+      transition: .28s ease;
+      z-index: 50;
+      opacity: 0;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .danger-zone {
+      border: 1px solid #fecaca;
+      background: #fff7f7;
+    }
+
+    @media (max-width: 900px) {
+      .grid, .grid.three, .grid.two { grid-template-columns: 1fr; }
+      .tabs { grid-template-columns: repeat(3, 1fr); }
+      h1 { font-size: 27px; }
+      header { align-items: flex-start; flex-direction: column; }
+      .week-pill { align-self: stretch; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">🛍️</div>
+        <div>
+          <h1>Matan's School Shop</h1>
+          <div class="subtitle">Inventory, sales, employees, profit, and cash box</div>
+        </div>
+      </div>
+      <div class="week-pill" id="weekPill">Week 1</div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab-btn active" onclick="showTab('dashboard', this)">Dashboard</button>
+      <button class="tab-btn" onclick="showTab('sales', this)">Sales</button>
+      <button class="tab-btn" onclick="showTab('inventory', this)">Inventory</button>
+      <button class="tab-btn" onclick="showTab('employees', this)">Employees</button>
+      <button class="tab-btn" onclick="showTab('cash', this)">Cash Box</button>
+      <button class="tab-btn" onclick="showTab('reports', this)">Reports</button>
+    </nav>
+
+    <section id="dashboard" class="screen active">
+      <div class="grid">
+        <div class="card metric"><div class="label">Sales</div><div class="value blue" id="mSales">$0</div></div>
+        <div class="card metric"><div class="label">Gross Profit</div><div class="value good" id="mGross">$0</div></div>
+        <div class="card metric"><div class="label">Payroll</div><div class="value orange" id="mPayroll">$0</div></div>
+        <div class="card metric"><div class="label">Net Profit</div><div class="value purple" id="mNet">$0</div></div>
+      </div>
+      <div style="height:16px"></div>
+      <div class="grid three">
+        <div class="card"><h2>🚨 Low Stock</h2><div id="lowStockList" class="list" style="margin-top:14px"></div></div>
+        <div class="card"><h2>🥇 Best Seller</h2><div class="metric"><div class="value orange" id="bestSeller">None</div></div></div>
+        <div class="card"><h2>💰 Most Profitable</h2><div class="metric"><div class="value good" id="mostProfitable">None</div></div></div>
+      </div>
+    </section>
+
+    <section id="sales" class="screen">
+      <div class="grid two">
+        <div class="card">
+          <div class="section-title"><h2>Record Sale</h2><span class="tag green">Fast checkout</span></div>
+          <label>Item</label>
+          <select id="saleItem"></select>
+          <label>Sold By</label>
+          <select id="saleEmployee"></select>
+          <button class="btn green full" onclick="recordSale()">Add Sale</button>
+        </div>
+        <div class="card">
+          <h2>Today's Sales</h2>
+          <div id="salesList" class="list" style="margin-top:14px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="inventory" class="screen">
+      <div class="grid two">
+        <div class="card">
+          <div class="section-title"><h2>Add Inventory</h2><span class="tag">Product setup</span></div>
+          <label>Item Name</label><input id="itemName" placeholder="Gatorade" />
+          <label>Cost</label><input id="itemCost" type="number" step="0.01" placeholder="1.50" />
+          <label>Selling Price</label><input id="itemPrice" type="number" step="0.01" placeholder="3.00" />
+          <label>Quantity</label><input id="itemQty" type="number" placeholder="10" />
+          <button class="btn full" onclick="addInventory()">Add Item</button>
+        </div>
+        <div class="card">
+          <h2>Inventory List</h2>
+          <div id="inventoryList" class="list" style="margin-top:14px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="employees" class="screen">
+      <div class="grid two">
+        <div class="card">
+          <div class="section-title"><h2>Add Employee</h2><span class="tag purple">Weekly pay</span></div>
+          <label>Name</label><input id="empName" placeholder="Ben" />
+          <label>Weekly Flat Fee</label><input id="empFee" type="number" step="0.01" placeholder="5" />
+          <button class="btn full" onclick="addEmployee()">Add Employee</button>
+        </div>
+        <div class="card">
+          <h2>Employee Leaderboard</h2>
+          <div id="employeeList" class="list" style="margin-top:14px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cash" class="screen">
+      <div class="grid two">
+        <div class="card">
+          <div class="section-title"><h2>Cash Box</h2><span class="tag green">Money control</span></div>
+          <label>Starting Cash</label><input id="startingCash" type="number" step="0.01" placeholder="20" />
+          <button class="btn full" onclick="setStartingCash()">Set Starting Cash</button>
+          <label>Expense Type</label>
+          <select id="cashOutType"><option>Inventory</option><option>Payroll</option><option>Other</option></select>
+          <label>Cash Out Amount</label><input id="cashOutAmount" type="number" step="0.01" placeholder="10" />
+          <button class="btn orange full" onclick="addCashOut()">Add Cash Out</button>
+          <label>Actual Cash Count</label><input id="actualCash" type="number" step="0.01" placeholder="68" />
+          <button class="btn secondary full" onclick="setActualCash()">Save Counted Cash</button>
+        </div>
+        <div class="card">
+          <h2>Cash Summary</h2>
+          <div class="grid two" style="margin-top:14px">
+            <div class="card metric"><div class="label">Expected</div><div class="value blue" id="expectedCash">$0</div></div>
+            <div class="card metric"><div class="label">Difference</div><div class="value" id="cashDiff">$0</div></div>
+          </div>
+          <div id="cashOutList" class="list" style="margin-top:14px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reports" class="screen">
+      <div class="grid two">
+        <div class="card">
+          <div class="section-title"><h2>Weekly Reports</h2><span class="tag orange">History</span></div>
+          <label>What went well this week?</label>
+          <textarea id="weekNote" rows="4" placeholder="We sold a lot of snacks after lunch..."></textarea>
+          <button class="btn green full" onclick="closeWeek()">Close Week</button>
+        </div>
+        <div class="card">
+          <h2>Report History</h2>
+          <div id="reportsList" style="margin-top:14px"></div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+      <div class="card danger-zone">
+        <div class="section-title"><h2>Admin</h2><span class="tag red">Careful</span></div>
+        <button class="btn red" onclick="resetAllData()">Reset All Data</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast">Saved</div>
+
+<script>
+const money = n => `$${(Number(n) || 0).toFixed(2)}`;
+const get = key => JSON.parse(localStorage.getItem(key) || 'null');
+const set = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+
+function seedData() {
+  if (!localStorage.getItem('currentWeek')) localStorage.setItem('currentWeek', '1');
+  if (!get('inventory')) set('inventory', [
+    { name: 'Gatorade', cost: 1.50, price: 3.00, quantity: 10 },
+    { name: 'Takis', cost: 1.00, price: 2.50, quantity: 8 }
+  ]);
+  if (!get('employees')) set('employees', [{ name: 'Matan', weeklyFee: 0, paid: true }]);
+  if (!get('sales')) set('sales', []);
+  if (!get('weeklyReports')) set('weeklyReports', []);
+  if (!get('cashBox')) set('cashBox', { startingCash: 0, cashOuts: [] });
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1700);
+}
+
+function calculateMetrics() {
+  const sales = get('sales') || [];
+  const employees = get('employees') || [];
+  const totalSales = sales.reduce((s, x) => s + Number(x.price), 0);
+  const totalCost = sales.reduce((s, x) => s + Number(x.cost), 0);
+  const grossProfit = totalSales - totalCost;
+  const payroll = employees.reduce((s, e) => s + Number(e.weeklyFee || 0), 0);
+  const netProfit = grossProfit - payroll;
+  return { totalSales, totalCost, grossProfit, payroll, netProfit };
+}
+
+function recordSale() {
+  const itemName = document.getElementById('saleItem').value;
+  const employee = document.getElementById('saleEmployee').value || 'Matan';
+  const inventory = get('inventory') || [];
+  const sales = get('sales') || [];
+  const item = inventory.find(i => i.name === itemName);
+  if (!item) return toast('Add inventory first');
+  if (item.quantity <= 0) return toast('Out of stock');
+  item.quantity -= 1;
+  sales.push({ item: item.name, price: Number(item.price), cost: Number(item.cost), employee, date: new Date().toISOString() });
+  set('inventory', inventory); set('sales', sales);
+  toast('Sale added'); render();
+}
+
+function addInventory() {
+  const name = document.getElementById('itemName').value.trim();
+  const cost = Number(document.getElementById('itemCost').value);
+  const price = Number(document.getElementById('itemPrice').value);
+  const quantity = Number(document.getElementById('itemQty').value);
+  if (!name || !price || quantity < 0) return toast('Check item info');
+  const inventory = get('inventory') || [];
+  const existing = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
+  if (existing) { existing.cost = cost; existing.price = price; existing.quantity += quantity; }
+  else inventory.push({ name, cost, price, quantity });
+  set('inventory', inventory);
+  ['itemName','itemCost','itemPrice','itemQty'].forEach(id => document.getElementById(id).value = '');
+  toast('Inventory saved'); render();
+}
+
+function restockItem(name) {
+  const amount = Number(prompt('How many to add?', '5'));
+  if (!amount) return;
+  const inventory = get('inventory') || [];
+  const item = inventory.find(i => i.name === name);
+  if (item) item.quantity += amount;
+  set('inventory', inventory); toast('Restocked'); render();
+}
+
+function deleteItem(name) {
+  set('inventory', (get('inventory') || []).filter(i => i.name !== name));
+  toast('Item removed'); render();
+}
+
+function addEmployee() {
+  const name = document.getElementById('empName').value.trim();
+  const weeklyFee = Number(document.getElementById('empFee').value);
+  if (!name) return toast('Add employee name');
+  const employees = get('employees') || [];
+  employees.push({ name, weeklyFee, paid: false });
+  set('employees', employees);
+  document.getElementById('empName').value = '';
+  document.getElementById('empFee').value = '';
+  toast('Employee added'); render();
+}
+
+function togglePaid(index) {
+  const employees = get('employees') || [];
+  employees[index].paid = !employees[index].paid;
+  set('employees', employees); render();
+}
+
+function employeeStats() {
+  const sales = get('sales') || [];
+  const stats = {};
+  sales.forEach(s => {
+    if (!stats[s.employee]) stats[s.employee] = { sales: 0, profit: 0, count: 0 };
+    stats[s.employee].sales += Number(s.price);
+    stats[s.employee].profit += Number(s.price) - Number(s.cost);
+    stats[s.employee].count += 1;
+  });
+  return stats;
+}
+
+function setStartingCash() {
+  const cashBox = get('cashBox') || { startingCash: 0, cashOuts: [] };
+  cashBox.startingCash = Number(document.getElementById('startingCash').value);
+  set('cashBox', cashBox); toast('Starting cash saved'); render();
+}
+
+function addCashOut() {
+  const type = document.getElementById('cashOutType').value;
+  const amount = Number(document.getElementById('cashOutAmount').value);
+  if (!amount) return toast('Add amount');
+  const cashBox = get('cashBox') || { startingCash: 0, cashOuts: [] };
+  cashBox.cashOuts.push({ type, amount, date: new Date().toISOString() });
+  set('cashBox', cashBox);
+  document.getElementById('cashOutAmount').value = '';
+  toast('Cash out added'); render();
+}
+
+function setActualCash() {
+  localStorage.setItem('actualCash', String(Number(document.getElementById('actualCash').value)));
+  toast('Cash count saved'); render();
+}
+
+function expectedCash() {
+  const cashBox = get('cashBox') || { startingCash: 0, cashOuts: [] };
+  const sales = (get('sales') || []).reduce((s, x) => s + Number(x.price), 0);
+  const outs = cashBox.cashOuts.reduce((s, x) => s + Number(x.amount), 0);
+  return Number(cashBox.startingCash || 0) + sales - outs;
+}
+
+function bestSeller() {
+  const counts = {};
+  (get('sales') || []).forEach(s => counts[s.item] = (counts[s.item] || 0) + 1);
+  return Object.entries(counts).sort((a,b) => b[1]-a[1])[0]?.[0] || 'None';
+}
+
+function mostProfitable() {
+  const profits = {};
+  (get('sales') || []).forEach(s => profits[s.item] = (profits[s.item] || 0) + (Number(s.price)-Number(s.cost)));
+  return Object.entries(profits).sort((a,b) => b[1]-a[1])[0]?.[0] || 'None';
+}
+
+function closeWeek() {
+  const metrics = calculateMetrics();
+  const stats = employeeStats();
+  const topEmployee = Object.entries(stats).sort((a,b) => b[1].sales-a[1].sales)[0]?.[0] || 'N/A';
+  const currentWeek = Number(localStorage.getItem('currentWeek') || '1');
+  const reports = get('weeklyReports') || [];
+  reports.push({
+    week: currentWeek,
+    ...metrics,
+    expectedCash: expectedCash(),
+    actualCash: Number(localStorage.getItem('actualCash') || 0),
+    cashDifference: Number(localStorage.getItem('actualCash') || 0) - expectedCash(),
+    topEmployee,
+    bestSeller: bestSeller(),
+    mostProfitable: mostProfitable(),
+    note: document.getElementById('weekNote').value.trim(),
+    date: new Date().toLocaleDateString()
+  });
+  set('weeklyReports', reports);
+  set('sales', []);
+  const employees = get('employees') || [];
+  employees.forEach(e => e.paid = false);
+  set('employees', employees);
+  set('cashBox', { startingCash: 0, cashOuts: [] });
+  localStorage.removeItem('actualCash');
+  localStorage.setItem('currentWeek', String(currentWeek + 1));
+  document.getElementById('weekNote').value = '';
+  toast(`Week closed: ${money(metrics.netProfit)} net profit`); render();
+}
+
+function resetAllData() {
+  if (!confirm('Reset everything? This deletes all shop data on this device.')) return;
+  localStorage.clear(); seedData(); toast('Reset complete'); render();
+}
+
+function render() {
+  document.getElementById('weekPill').textContent = `Week ${localStorage.getItem('currentWeek') || 1}`;
+  const metrics = calculateMetrics();
+  document.getElementById('mSales').textContent = money(metrics.totalSales);
+  document.getElementById('mGross').textContent = money(metrics.grossProfit);
+  document.getElementById('mPayroll').textContent = money(metrics.payroll);
+  document.getElementById('mNet').textContent = money(metrics.netProfit);
+  document.getElementById('bestSeller').textContent = bestSeller();
+  document.getElementById('mostProfitable').textContent = mostProfitable();
+
+  const inventory = get('inventory') || [];
+  const employees = get('employees') || [];
+  const sales = get('sales') || [];
+  const cashBox = get('cashBox') || { startingCash: 0, cashOuts: [] };
+  const stats = employeeStats();
+
+  document.getElementById('saleItem').innerHTML = inventory.map(i => `<option>${i.name}</option>`).join('');
+  document.getElementById('saleEmployee').innerHTML = employees.map(e => `<option>${e.name}</option>`).join('');
+
+  document.getElementById('inventoryList').innerHTML = inventory.length ? inventory.map(i => `
+    <div class="row"><div><div class="row-title">${i.name}</div><div class="row-sub">Cost ${money(i.cost)} • Price ${money(i.price)} • Profit ${money(i.price-i.cost)} <span class="tag ${i.quantity <= 3 ? 'red' : 'green'}">${i.quantity} left</span></div></div><div><button class="btn secondary" onclick="restockItem('${i.name}')">Restock</button> <button class="btn red" onclick="deleteItem('${i.name}')">Delete</button></div></div>
+  `).join('') : `<div class="empty">No inventory yet.</div>`;
+
+  const low = inventory.filter(i => i.quantity <= 3);
+  document.getElementById('lowStockList').innerHTML = low.length ? low.map(i => `<div class="row"><div><div class="row-title">${i.name}</div><div class="row-sub">Only ${i.quantity} left</div></div><span class="tag red">Low</span></div>`).join('') : `<div class="empty">Nothing is low. Nice job.</div>`;
+
+  document.getElementById('salesList').innerHTML = sales.length ? [...sales].reverse().map(s => `<div class="row"><div><div class="row-title">${s.item}</div><div class="row-sub">Sold by ${s.employee} • Profit ${money(s.price-s.cost)}</div></div><span class="tag green">${money(s.price)}</span></div>`).join('') : `<div class="empty">No sales yet this week.</div>`;
+
+  document.getElementById('employeeList').innerHTML = employees.length ? employees.map((e, idx) => {
+    const st = stats[e.name] || { sales: 0, profit: 0, count: 0 };
+    return `<div class="row"><div><div class="row-title">${e.name}</div><div class="row-sub">Weekly fee ${money(e.weeklyFee)} • Sales ${money(st.sales)} • Profit ${money(st.profit)}</div></div><button class="btn ${e.paid ? 'green' : 'secondary'}" onclick="togglePaid(${idx})">${e.paid ? 'Paid' : 'Unpaid'}</button></div>`;
+  }).join('') : `<div class="empty">No employees yet.</div>`;
+
+  const exp = expectedCash();
+  const actual = Number(localStorage.getItem('actualCash') || 0);
+  const diff = actual - exp;
+  document.getElementById('expectedCash').textContent = money(exp);
+  document.getElementById('cashDiff').textContent = money(diff);
+  document.getElementById('cashDiff').className = `value ${diff < 0 ? 'bad' : 'good'}`;
+  document.getElementById('startingCash').value = cashBox.startingCash || '';
+  document.getElementById('actualCash').value = localStorage.getItem('actualCash') || '';
+  document.getElementById('cashOutList').innerHTML = cashBox.cashOuts.length ? cashBox.cashOuts.map(x => `<div class="row"><div><div class="row-title">${x.type}</div><div class="row-sub">Cash out</div></div><span class="tag orange">${money(x.amount)}</span></div>`).join('') : `<div class="empty">No cash out recorded.</div>`;
+
+  const reports = get('weeklyReports') || [];
+  document.getElementById('reportsList').innerHTML = reports.length ? `
+    <table><thead><tr><th>Week</th><th>Sales</th><th>Net</th><th>Top</th></tr></thead><tbody>
+    ${reports.map(r => `<tr><td>Week ${r.week}</td><td>${money(r.totalSales)}</td><td>${money(r.netProfit)}</td><td>${r.topEmployee}</td></tr>`).join('')}
+    </tbody></table>
+  ` : `<div class="empty">No weekly reports yet.</div>`;
+}
+
+seedData();
+render();
+</script>
+</body>
+</html>
